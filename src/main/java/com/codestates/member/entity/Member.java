@@ -2,6 +2,7 @@ package com.codestates.member.entity;
 
 import com.codestates.audit.Auditable;
 import com.codestates.order.entity.Order;
+import com.codestates.question.entity.Question;
 import com.codestates.stamp.Stamp;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,9 @@ public class Member extends Auditable {
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.PERSIST)
     private Stamp stamp;
+
+    @OneToMany(mappedBy = "member")
+    private List<Question> questions = new ArrayList<>();
 
     public Member(String email) {
         this.email = email;
