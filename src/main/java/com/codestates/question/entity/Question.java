@@ -1,5 +1,6 @@
 package com.codestates.question.entity;
 
+import com.codestates.answer.entity.Answer;
 import com.codestates.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,7 +32,7 @@ public class Question {
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_REGISTRATION;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
+    @Column(length = 30, nullable = false)
     private QuestionDisclosure questionDisclosure;
 
     @Column(nullable = false)
@@ -39,17 +42,24 @@ public class Question {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Answer> answers = new ArrayList<>();
+
     public enum QuestionStatus {
-        QUESTION_REGISTRATION("질문 등록"),
-        QUESTION_ANSWERED("답변 완료"),
-        QUESTION_DELETE("질문 삭제!"),
+        QUESTION_REGISTRATION("질문 등록", 1),
+        QUESTION_ANSWERED("답변 완료", 2),
+        QUESTION_DELETE("질문 삭제!", 3),
         ;
 
         @Getter
         private String status;
 
-        QuestionStatus(String status) {
+        @Getter
+        private int step;
+
+        QuestionStatus(String status, int step) {
             this.status = status;
+            this.step = step;
         }
     }
 
@@ -63,5 +73,18 @@ public class Question {
         QuestionDisclosure(String disclosure) {
             this.disclosure = disclosure;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "questionId=" + questionId +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", questionStatus=" + questionStatus +
+                ", questionDisclosure=" + questionDisclosure +
+                ", createdAt=" + createdAt +
+                ", member=" + member +
+                '}';
     }
 }

@@ -10,7 +10,11 @@ public enum ExceptionCode {
     ORDER_NOT_FOUND(404, "Order not found"),
     CANNOT_CHANGE_ORDER(403, "Order can not change"),
     NOT_IMPLEMENTATION(501, "Not Implementation"),
-    INVALID_MEMBER_STATUS(400, "Invalid member status");
+    INVALID_MEMBER_STATUS(400, "Invalid member status"),
+    QUESTION_NOT_FOUND(1004, "Question not found"),
+    QUESTION_ALREADY_ANSWERED(1005, "This Question is Already Answered"),
+    QUESTION_NO_PERMISSION(1006, "No permission to edit Question posts"),
+    ANSWER_NO_PERMISSION(1007, "No permission to reply to Question posts ");
 
     @Getter
     private int status;
