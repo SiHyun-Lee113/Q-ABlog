@@ -42,7 +42,7 @@ public class Question {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "question")
     private List<Answer> answers = new ArrayList<>();
 
     public enum QuestionStatus {

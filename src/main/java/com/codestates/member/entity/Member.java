@@ -45,7 +45,7 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member")
     private List<Question> questions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "member")
     private List<Answer> answers = new ArrayList<>();
 
     public Member(String email) {

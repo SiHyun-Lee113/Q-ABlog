@@ -25,5 +25,4 @@ public class QuestionPostDto {
         member.setMemberId(memberId);
         return member;
     }
-
 }

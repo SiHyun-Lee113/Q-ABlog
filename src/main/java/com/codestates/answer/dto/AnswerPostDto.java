@@ -1,33 +1,34 @@
-package com.codestates.question.dto;
+package com.codestates.answer.dto;
 
 import com.codestates.member.entity.Member;
 import com.codestates.question.entity.Question;
 import lombok.Getter;
-import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Positive;
+import java.time.LocalDateTime;
 
 @Getter
-public class QuestionPatchDto {
-
-    @Positive
-    private long memberId;
+public class AnswerPostDto {
 
     @Positive
     private long questionId;
 
-    private String title;
+    @Positive
+    private long memberId;
 
     private String content;
 
-    private Question.QuestionDisclosure questionDisclosure;
-
-    private Question.QuestionStatus questionStatus;
+    private LocalDateTime localDateTime = LocalDateTime.now();
 
     public Member getMember() {
         Member member = new Member();
         member.setMemberId(memberId);
         return member;
+    }
+
+    public Question getQuestion() {
+        Question question = new Question();
+        question.setQuestionId(questionId);
+        return question;
     }
 }
