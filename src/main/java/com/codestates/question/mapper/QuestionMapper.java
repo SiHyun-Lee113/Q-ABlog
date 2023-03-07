@@ -18,10 +18,24 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
-    Question questionPostDtoToQuestion(QuestionPostDto questionPostDto);
+    default Question questionPostDtoToQuestion(QuestionPostDto questionPostDto){
+        if ( questionPostDto == null ) {
+            return null;
+        }
+
+        Question question = new Question();
+
+        question.setTitle( questionPostDto.getTitle() );
+        question.setContent( questionPostDto.getContent() );
+        question.setQuestionDisclosure( questionPostDto.getQuestionDisclosure() );
+        question.setMember( questionPostDto.getMember() );
+
+        System.out.println(questionPostDto.getMember());
+
+        return question;
+    };
 
     List<QuestionResponseDto> questionsToQuestionResponseDtos(List<Question> questions);
-
 
     Question questionPatchDtoToQuestion(QuestionPatchDto questionPatchDto);
 
@@ -29,7 +43,6 @@ public interface QuestionMapper {
         QuestionResponseDto questionResponseDto = new QuestionResponseDto();
 
         List<AnswerResponseDto> answers = new ArrayList<>();
-
         for (Answer answer : question.getAnswers()) {
             AnswerResponseDto answerResponseDto = new AnswerResponseDto();
             answerResponseDto.setMemberId(answer.getMember().getMemberId());
@@ -38,7 +51,6 @@ public interface QuestionMapper {
             answerResponseDto.setLocalDateTime(answer.getCreatedAt());
             answers.add(answerResponseDto);
         }
-
         questionResponseDto.setAnswers(answers);
         questionResponseDto.setQuestionStatus(question.getQuestionStatus());
         questionResponseDto.setQuestionDisclosure(question.getQuestionDisclosure());

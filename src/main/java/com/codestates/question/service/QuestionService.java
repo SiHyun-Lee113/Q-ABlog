@@ -6,6 +6,7 @@ import com.codestates.member.entity.Member;
 import com.codestates.member.service.MemberService;
 import com.codestates.question.entity.Question;
 import com.codestates.question.repository.QuestionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class QuestionService {
 
@@ -48,8 +50,9 @@ public class QuestionService {
                 .ifPresent(findQuestion::setContent);
         Optional.ofNullable(question.getQuestionDisclosure())
                 .ifPresent(findQuestion::setQuestionDisclosure);
-        Optional.ofNullable(question.getQuestionStatus())
-                .ifPresent(findQuestion::setQuestionStatus);
+        if (findQuestion.getQuestionStatus() != null) {
+            question.setQuestionStatus(findQuestion.getQuestionStatus());
+        }
 
         return questionRepository.save(question);
     }
@@ -98,8 +101,10 @@ public class QuestionService {
         Question findQuestion = optionalQuestion.orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
 
+        Member findMember = memberService.findMember(question.getMember().getMemberId());
+
         if (!(Objects.equals(findQuestion.getMember().getMemberId(), question.getMember().getMemberId()) ||
-                        Objects.equals(findQuestion.getMember().getEmail(), "admin@gmail.com"))) {
+                        Objects.equals(findMember.getEmail(), "admin@gmail.com"))) {
             throw new BusinessLogicException(ExceptionCode.QUESTION_NO_PERMISSION);
         }
     }

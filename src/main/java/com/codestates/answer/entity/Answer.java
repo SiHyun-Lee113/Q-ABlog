@@ -29,4 +29,14 @@ public class Answer extends Auditable {
     @ManyToOne
     @JoinColumn(name = "questionId")
     private Question question;
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "answerId=" + answerId +
+                ", content='" + content + '\'' +
+                ", member=" + member +
+                ", question=" + question +
+                '}';
+    }
 }

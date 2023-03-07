@@ -14,8 +14,10 @@ public enum ExceptionCode {
     QUESTION_NOT_FOUND(1004, "Question not found"),
     QUESTION_ALREADY_ANSWERED(1005, "This Question is Already Answered"),
     QUESTION_NO_PERMISSION(1006, "No permission to edit Question posts"),
+    QUESTION_IS_DELETED(1008, "This post already DELETED!!"),
     ANSWER_NO_PERMISSION(1007, "No permission to reply to Question posts "),
-    QUESTION_IS_DELETED(1008, "This post already DELETED!!");
+    ANSWER_NOT_FOUND(1009, "Answer not found");
+
 
     @Getter
     private int status;
