@@ -28,7 +28,7 @@ public class AnswerService {
 
     public Answer createAnswer(Answer answer) {
         // 답변은 질문 작성자, 관리자만 달 수 있다.
-        verifyWriter(answer);
+        verifyQuestionWriter(answer);
 
         return answerRepository.save(answer);
     }
@@ -70,12 +70,11 @@ public class AnswerService {
         }
     }
 
-    public void verifyWriter(Answer answer) {
-        long questionId = answer.getQuestion().getQuestionId();
-        Long memberId = answer.getMember().getMemberId();
+    public void verifyQuestionWriter(Answer answer) {
+        Question question = answer.getQuestion();
+        question.setMember(answer.getMember());
+        System.out.println("question = " + question);
 
-        if (!(questionService.verifyQuestionOwner(memberId, questionId))) {
-            throw new BusinessLogicException(ExceptionCode.ANSWER_NO_PERMISSION);
-        }
+        questionService.checkQuestionOwner(question);
     }
 }

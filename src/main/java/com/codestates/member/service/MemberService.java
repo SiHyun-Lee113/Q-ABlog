@@ -105,6 +105,6 @@ public class MemberService {
         Member member = findMember(memberId);
         String email = member.getEmail();
 
-        return !email.equals("admin@gmail.com");
+        return email.equals("admin@gmail.com");
     }
 }

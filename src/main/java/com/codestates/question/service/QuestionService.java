@@ -31,7 +31,8 @@ public class QuestionService {
     }
 
     public Question createQuestion(Question question) {
-        verifyQuestion(question);
+        // member가 존재하는지 확인
+        verifyMember(question);
 
         return questionRepository.save(question);
     }
@@ -45,7 +46,7 @@ public class QuestionService {
 
         Question findQuestion = findVerifiedQuestion(question.getQuestionId());
         Optional.ofNullable(question.getTitle())
-                .ifPresent(findQuestion::setTitle);
+                .ifPresent(title -> findQuestion.setTitle(title));
         Optional.ofNullable(question.getContent())
                 .ifPresent(findQuestion::setContent);
         Optional.ofNullable(question.getQuestionDisclosure())
@@ -84,17 +85,21 @@ public class QuestionService {
         questionRepository.save(findQuestion);
     }
 
+    public void verifyMember(Question question) {
+        memberService.findVerifiedMember(question.getMember().getMemberId());
+    }
+
     public Question findVerifiedQuestion(long questionId) {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
-        Question findQuestion = optionalQuestion.orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+        Question findQuestion = optionalQuestion.orElseThrow(
+                () -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+
         if (findQuestion.getQuestionStatus() == Question.QuestionStatus.QUESTION_DELETE) {
             throw new BusinessLogicException(ExceptionCode.QUESTION_IS_DELETED);
         }
         return findQuestion;
     }
-    public void verifyQuestion(Question question) {
-        memberService.findVerifiedMember(question.getMember().getMemberId());
-    }
+
 
     public void checkQuestionOwner(Question question) {
         Optional<Question> optionalQuestion = questionRepository.findById(question.getQuestionId());
@@ -109,17 +114,6 @@ public class QuestionService {
         }
     }
 
-    public boolean verifyQuestionOwner(long memberId, long questionId) {
-        Question question = new Question();
-        Member member = new Member();
-        member.setMemberId(memberId);
-        question.setQuestionId(questionId);
-        question.setMember(member);
-
-        checkQuestionOwner(question);
-
-        return true;
-    }
 
     public void checkAnswered(Question question) {
         Optional<Question> optionalQuestion = questionRepository.findById(question.getQuestionId());
